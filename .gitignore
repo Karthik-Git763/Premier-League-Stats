@@ -1,0 +1,18 @@
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+.RDataTmp
+
+# User-specific files
+.Rdata
+.Ruserdata
+
+# Graphics
+Rplots.pdf
+
+# Nix specific
+result
+result-*

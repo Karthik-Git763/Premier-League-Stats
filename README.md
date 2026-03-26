@@ -4,7 +4,15 @@ Fetching the dataset from this
 
 # Convention to follow
 
-### Add Summary like analysis answers in section 9 and Export dataset for Powerbi in Section 10 of the epl_analysis.R file.
+### The project is structured modularly. Analysis findings are aggregated in `analysis/` and datasets for PowerBI are exported via the `main.R` orchestrator natively via a nix flake (`nix develop . --command Rscript main.R`).
+
+## How to run the analysis
+1. Ensure you have Nix installed with flakes enabled.
+2. Run the full analysis sequence by executing:
+   ```bash
+   nix develop . --command Rscript main.R
+   ```
+3. The exported outputs will be saved in the `powerbi_data/` directory.
 
 ## Phase 1: Kaggle Site from 3rd Section
 
@@ -20,19 +28,19 @@ Fetching the dataset from this
 
 ### 3.1 Verify Export Files
 
-- [ ] Check `powerbi_data/` folder exists
-- [ ] Verify `epl_clean.csv` (cleaned dataset, ~562 rows)
-- [ ] Verify `summary_by_club.csv` (20 clubs)
-- [ ] Verify `summary_by_position.csv` (4 positions)
-- [ ] Verify `summary_by_nationality.csv` (all nationalities)
-- [ ] Verify `top_performers.csv` (top 20 by each category)
+- [x] Check `powerbi_data/` folder exists
+- [x] Verify `epl_clean.csv` (cleaned dataset, ~562 rows)
+- [x] Verify `summary_by_club.csv` (20 clubs)
+- [x] Verify `summary_by_position.csv` (4 positions)
+- [x] Verify `summary_by_nationality.csv` (all nationalities)
+- [x] Verify `top_performers.csv` (top 20 by each category)
 
 ### 3.2 Data Quality Check
 
-- [ ] No missing values in key columns
-- [ ] Numeric columns are properly formatted
-- [ ] Club names are consistent
-- [ ] Position values are: Goalkeeper, Defender, Midfielder, Forward
+- [x] No missing values in key columns
+- [x] Numeric columns are properly formatted
+- [x] Club names are consistent
+- [x] Position values are: Goalkeeper, Defender, Midfielder, Forward
 
 ---
 
