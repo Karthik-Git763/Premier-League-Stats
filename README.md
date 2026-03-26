@@ -34,6 +34,9 @@ Fetching the dataset from this
 - [x] Verify `summary_by_position.csv` (4 positions)
 - [x] Verify `summary_by_nationality.csv` (all nationalities)
 - [x] Verify `top_performers.csv` (top 20 by each category)
+- [x] Verify `goalkeeper_stats.csv` (69 goalkeepers with derived metrics)
+- [x] Verify `offensive_metrics.csv` (502 outfield players with offensive ratings)
+- [x] Verify `defensive_metrics.csv` (435 outfield players with defensive ratings)
 
 ### 3.2 Data Quality Check
 
@@ -58,6 +61,9 @@ Fetching the dataset from this
 - [ ] Import `summary_by_position.csv`
 - [ ] Import `summary_by_nationality.csv`
 - [ ] Import `top_performers.csv`
+- [ ] Import `goalkeeper_stats.csv`
+- [ ] Import `offensive_metrics.csv`
+- [ ] Import `defensive_metrics.csv`
 
 ### 4.3 Data Model
 
