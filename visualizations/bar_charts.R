@@ -2,6 +2,17 @@
 
 cat("\n  CREATING BAR CHARTS  \n")
 
+safe_brewer_palette <- function(palette_name, n) {
+  max_n <- RColorBrewer::brewer.pal.info[palette_name, "maxcolors"]
+  base_cols <- RColorBrewer::brewer.pal(max_n, palette_name)
+
+  if (n <= max_n) {
+    base_cols[seq_len(n)]
+  } else {
+    colorRampPalette(base_cols)(n)
+  }
+}
+
 # 6.1 Bar Chart: Appearances by Club (stacked by position)
 club_position_data <- data_clean |>
   group_by(Club, Position) |>
@@ -38,7 +49,9 @@ bar_club_static <- ggplot(
     plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
     axis.text.y = element_text(size = 8)
   ) +
-  scale_fill_brewer(palette = "Set2")
+  scale_fill_manual(
+    values = safe_brewer_palette("Set2", dplyr::n_distinct(club_position_data$Position))
+  )
 
 print(bar_club_static)
 
@@ -48,9 +61,10 @@ bar_club_interactive <- plot_ly(
   x = ~Appearances,
   y = ~Club,
   color = ~Position,
-  colors = RColorBrewer::brewer.pal(4, "Set2"),
+  colors = safe_brewer_palette("Set2", dplyr::n_distinct(club_position_data$Position)),
   type = "bar",
-  orientation = "h"
+  orientation = "h",
+  height = 600
 ) |>
   layout(
     barmode = "stack",
@@ -60,8 +74,7 @@ bar_club_interactive <- plot_ly(
       font = list(size = 18)
     ),
     xaxis = list(title = "Total Appearances"),
-    yaxis = list(title = "", categoryorder = "total ascending"),
-    height = 600
+    yaxis = list(title = "", categoryorder = "total ascending")
   )
 
 print(bar_club_interactive)
@@ -191,7 +204,9 @@ bar_goals_position_static <- ggplot(
     plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
     legend.position = "none"
   ) +
-  scale_fill_brewer(palette = "Set2") +
+  scale_fill_manual(
+    values = safe_brewer_palette("Set2", dplyr::n_distinct(goals_by_position$Position))
+  ) +
   geom_text(aes(label = Total_Goals), vjust = -0.5, size = 4)
 
 print(bar_goals_position_static)

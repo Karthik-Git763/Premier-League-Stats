@@ -2,6 +2,17 @@
 
 cat("\n  CREATING PIE CHARTS  \n")
 
+safe_brewer_palette <- function(palette_name, n) {
+  max_n <- RColorBrewer::brewer.pal.info[palette_name, "maxcolors"]
+  base_cols <- RColorBrewer::brewer.pal(max_n, palette_name)
+
+  if (n <= max_n) {
+    base_cols[seq_len(n)]
+  } else {
+    colorRampPalette(base_cols)(n)
+  }
+}
+
 # 5.1 Pie Chart: Nationality by Appearances (ggplot2 - static)
 # Top 10 + Others
 nationality_pie_data <- data_clean |>
@@ -84,7 +95,9 @@ pie_position_static <- ggplot(
   theme(
     plot.title = element_text(hjust = 0.5, size = 14, face = "bold")
   ) +
-  scale_fill_brewer(palette = "Set2")
+  scale_fill_manual(
+    values = safe_brewer_palette("Set2", dplyr::n_distinct(position_pie_data$Position))
+  )
 
 print(pie_position_static)
 
@@ -96,7 +109,9 @@ pie_position_interactive <- plot_ly(
   type = "pie",
   textposition = "inside",
   textinfo = "percent+label",
-  marker = list(colors = RColorBrewer::brewer.pal(4, "Set2"))
+  marker = list(
+    colors = safe_brewer_palette("Set2", dplyr::n_distinct(position_pie_data$Position))
+  )
 ) |>
   layout(
     title = list(

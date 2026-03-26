@@ -1,6 +1,17 @@
 # SECTION 7: VISUALIZATIONS - BOX PLOTS
 cat("\n  CREATING BOX PLOTS  \n")
 
+safe_brewer_palette <- function(palette_name, n) {
+  max_n <- RColorBrewer::brewer.pal.info[palette_name, "maxcolors"]
+  base_cols <- RColorBrewer::brewer.pal(max_n, palette_name)
+
+  if (n <= max_n) {
+    base_cols[seq_len(n)]
+  } else {
+    colorRampPalette(base_cols)(n)
+  }
+}
+
 # Calculate average age for reference line
 avg_age <- mean(data_clean$Age, na.rm = TRUE)
 
@@ -19,8 +30,10 @@ box_age_position_static <- ggplot(data_clean, aes(x = Position, y = Age, fill = 
     plot.subtitle = element_text(hjust = 0.5),
     legend.position = "none"
   ) +
-  scale_fill_brewer(palette = "Set2") +
-  geom_hline(yintercept = avg_age, linetype = "dashed", color = "blue", size = 1)
+  scale_fill_manual(
+    values = safe_brewer_palette("Set2", dplyr::n_distinct(data_clean$Position))
+  ) +
+  geom_hline(yintercept = avg_age, linetype = "dashed", color = "blue", linewidth = 1)
 
 print(box_age_position_static)
 
@@ -31,7 +44,7 @@ box_age_position_interactive <- plot_ly(
   y = ~Age,
   color = ~Position,
   type = "box",
-  colors = RColorBrewer::brewer.pal(4, "Set2")
+  colors = safe_brewer_palette("Set2", dplyr::n_distinct(data_clean$Position))
 ) |>
   layout(
     title = list(
@@ -80,7 +93,7 @@ box_age_club_static <- ggplot(data_clean, aes(x = Club_ordered, y = Age, fill = 
     axis.text.y = element_text(size = 7)
   ) +
   geom_vline(xintercept = NULL) +
-  geom_hline(yintercept = avg_age, linetype = "dashed", color = "blue", size = 1)
+  geom_hline(yintercept = avg_age, linetype = "dashed", color = "blue", linewidth = 1)
 
 print(box_age_club_static)
 
@@ -90,8 +103,13 @@ box_age_club_interactive <- plot_ly(
   y = ~Club_ordered,
   x = ~Age,
   color = ~Club_ordered,
+  colors = grDevices::hcl.colors(
+    dplyr::n_distinct(data_clean$Club_ordered),
+    "Dark 3"
+  ),
   type = "box",
-  orientation = "h"
+  orientation = "h",
+  height = 700
 ) |>
   layout(
     title = list(
@@ -102,7 +120,6 @@ box_age_club_interactive <- plot_ly(
     xaxis = list(title = "Age (years)"),
     yaxis = list(title = ""),
     showlegend = FALSE,
-    height = 700,
     shapes = list(
       list(
         type = "line",
