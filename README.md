@@ -1,127 +1,130 @@
-Fetching the dataset from this
+# Premier League Player Statistics Analysis
 
-[Link Kaggle](https://www.kaggle.com/code/desalegngeb/english-premier-league-players-statistics/input)
+End-to-end R project for exploring Premier League player statistics, generating analysis plots, answering project use-case questions, and exporting cleaned/aggregated data for Power BI.
 
-# Convention to follow
+## Dataset Source
 
-### The project is structured modularly. Analysis findings are aggregated in `analysis/` and datasets for PowerBI are exported via the `main.R` orchestrator natively via a nix flake (`nix develop . --command Rscript main.R`).
+Kaggle input reference:
+https://www.kaggle.com/code/desalegngeb/english-premier-league-players-statistics/input
 
-## How to run the analysis
-1. Ensure you have Nix installed with flakes enabled.
-2. Run the full analysis sequence by executing:
-   ```bash
-   nix develop . --command Rscript main.R
-   ```
-3. The exported outputs will be saved in the `powerbi_data/` directory.
+Primary dataset file used in this repository:
+- `dataset - 2020-09-24.csv`
 
-## Phase 1: Kaggle Site from 3rd Section
+## Project Status
 
-### 1.1 Complete from 3rd Section Onwards
+Current state:
+- Analysis pipeline implemented
+- Data cleaning and transformation completed
+- Visualizations generated through R scripts
+- Power BI export files generated in `powerbi_data/`
+- Power BI workbook present (`dmdw.pbix`)
 
-### 1.2 Export dataset for PowerBi
+## Project Structure
 
-## Phase 2: Check questions given when creating project
+```text
+.
+|- main.R                     # Orchestrates the full workflow
+|- setup/init.R               # Package install + library loading
+|- data_prep/                 # Data loading and transformation
+|- analysis/                  # Summary, statistics, use-cases, findings
+|- visualizations/            # Histograms, pie/bar charts, boxplots, scatterplots
+|- export/powerbi.R           # Exports final CSVs for Power BI
+|- powerbi_data/              # Output CSVs consumed by Power BI
+|- dmdw.pbix                  # Power BI dashboard/report file
+|- flake.nix                  # Reproducible Nix dev environment
+```
 
-### 2.1 Need to implement analysis for those questions which will be asked by mam
+## Quick Start (Beginner Friendly)
 
-## Phase 3: Power BI Data Exports
+Choose one setup path.
 
-### 3.1 Verify Export Files
+### Option A: Recommended (Nix)
 
-- [x] Check `powerbi_data/` folder exists
-- [x] Verify `epl_clean.csv` (cleaned dataset, ~562 rows)
-- [x] Verify `summary_by_club.csv` (20 clubs)
-- [x] Verify `summary_by_position.csv` (4 positions)
-- [x] Verify `summary_by_nationality.csv` (all nationalities)
-- [x] Verify `top_performers.csv` (top 20 by each category)
-- [x] Verify `goalkeeper_stats.csv` (69 goalkeepers with derived metrics)
-- [x] Verify `offensive_metrics.csv` (502 outfield players with offensive ratings)
-- [x] Verify `defensive_metrics.csv` (435 outfield players with defensive ratings)
+Use this if you want a reproducible environment with dependencies preconfigured.
 
-### 3.2 Data Quality Check
+1. Install Nix and enable flakes.
+2. Open terminal at project root.
+3. Run:
 
-- [x] No missing values in key columns
-- [x] Numeric columns are properly formatted
-- [x] Club names are consistent
-- [x] Position values are: Goalkeeper, Defender, Midfielder, Forward
+```bash
+nix develop . --command Rscript main.R
+```
 
----
+### Option B: Standard R Setup (Without Nix)
 
-## Phase 4: Power BI Dashboard Creation
+Use this if you already have R/RStudio installed.
 
-### 4.1 Setup
+1. Install R (and optionally RStudio).
+2. Open terminal at project root.
+3. Run:
 
-- [ ] Install Power BI Desktop (https://powerbi.microsoft.com/downloads/)
-- [ ] Create new Power BI project
+```bash
+Rscript main.R
+```
 
-### 4.2 Data Import
+Notes:
+- `setup/init.R` auto-installs missing required packages.
+- First run may take longer because packages are downloaded.
 
-- [ ] Import `epl_clean.csv`
-- [ ] Import `summary_by_club.csv`
-- [ ] Import `summary_by_position.csv`
-- [ ] Import `summary_by_nationality.csv`
-- [ ] Import `top_performers.csv`
-- [ ] Import `goalkeeper_stats.csv`
-- [ ] Import `offensive_metrics.csv`
-- [ ] Import `defensive_metrics.csv`
+## What main.R Does
 
-### 4.3 Data Model
+The pipeline executes these stages in order:
 
-- [ ] Create relationship: epl_clean[Club] → summary_by_club[Club]
-- [ ] Create relationship: epl_clean[Position] → summary_by_position[Position]
-- [ ] Create relationship: epl_clean[Nationality] → summary_by_nationality[Nationality]
+1. Environment setup and package loading
+2. Data loading and cleaning
+3. Data transformations
+4. Summary statistics
+5. Visualizations
+6. Statistical analysis (correlation, ANOVA, etc.)
+7. Use-case/question analysis
+8. Findings summary
+9. Export processed datasets for Power BI
 
-### 4.4 Dashboard Pages
+## Generated Outputs
 
-#### Page 1: Overview
+After a successful run, check `powerbi_data/` for:
 
-- [ ] KPI Card: Total Players
-- [ ] KPI Card: Average Age
-- [ ] KPI Card: Total Goals
-- [ ] KPI Card: Total Assists
-- [ ] Pie Chart: Position Distribution
-- [ ] Donut Chart: Top 5 Nationalities
+- `epl_clean.csv`
+- `summary_by_club.csv`
+- `summary_by_position.csv`
+- `summary_by_nationality.csv`
+- `top_performers.csv`
+- `goalkeeper_stats.csv`
+- `offensive_metrics.csv`
+- `defensive_metrics.csv`
 
-#### Page 2: Club Analysis
+Other artifacts:
+- `Rplots.pdf` (plot output from R sessions/scripts)
 
-- [ ] Bar Chart: Total Goals by Club (sorted descending)
-- [ ] Stacked Bar: Appearances by Club and Position
-- [ ] Table: Club Statistics (Players, Avg Age, Goals, Assists)
-- [ ] Slicer: Club Filter
+## How to Open Power BI Dashboard
 
-#### Page 3: Player Performance
+1. Open `dmdw.pbix` in Power BI Desktop.
+2. If prompted for data path refresh, point to files in `powerbi_data/`.
+3. Refresh the model after rerunning `main.R`.
 
-- [ ] Bar Chart: Top 15 Scorers
-- [ ] Bar Chart: Top 15 Assist Providers
-- [ ] Scatter Plot: Goals vs Assists (bubble size = Appearances)
-- [ ] Table: Top Performers (from top_performers.csv)
-- [ ] Slicer: Position Filter
+## Common Beginner Issues
 
-#### Page 4: Age Analysis
+### 1) Command not found: Rscript
 
-- [ ] Bar Chart: Average Age by Club
-- [ ] Clustered Column: Age Distribution by Position
-- [ ] Card: Youngest Player
-- [ ] Card: Oldest Player
-- [ ] Card: Average Age
+Cause:
+- R is not installed or not in PATH.
 
-#### Page 5: Nationality Insights
+Fix:
+- Install R, restart terminal, and run `Rscript --version`.
 
-- [ ] Map Visual: Players by Country (if lat/long available)
-- [ ] Bar Chart: Top 10 Nationalities by Appearances
-- [ ] Table: Nationality breakdown
-- [ ] Pie Chart: English vs Foreign Players
+### 2) Package installation fails
 
-### 4.5 Interactivity
+Cause:
+- Network/proxy permissions or blocked CRAN mirror.
 
-- [ ] Add cross-filtering between visuals
-- [ ] Add drill-through for player details
-- [ ] Add tooltips with additional info
-- [ ] Add bookmarks for key insights
+Fix:
+- Retry on stable network.
+- Ensure access to `https://cloud.r-project.org/`.
 
-### 4.6 Formatting
+### 3) Nix command fails on Windows
 
-- [ ] Apply consistent color theme
-- [ ] Add titles to all visuals
-- [ ] Format numbers (comma separators, decimals)
-- [ ] Add page navigation buttons
+Cause:
+- Nix is not fully configured with flakes.
+
+Fix:
+- Enable flakes in Nix config, or use Option B (`Rscript main.R`).
